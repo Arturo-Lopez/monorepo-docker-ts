@@ -1,0 +1,11 @@
+{
+  "name": "monorepo-docker-ts",
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  }
+}

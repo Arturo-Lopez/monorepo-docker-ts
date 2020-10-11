@@ -1,0 +1,28 @@
+version: "3"
+
+# Add to /etc/hosts
+# 127.0.0.1 monorepo-docker-ts
+# 127.0.0.1	api.monorepo-docker-ts
+
+# API URL: http://api.monorepo-docker-ts/graphql
+# WEB URL: http://monorepo-docker-ts/
+
+services:
+  proxy:
+    image: traefik:v2.1
+    command: --api.insecure=true --providers.docker
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  api:
+    build: packages/api
+    labels:
+      - traefik.http.routers.api.rule=Host(`api.monorepo-docker-ts`)
+      - traefik.http.services.api.loadbalancer.server.port=7000
+  web:
+    build: packages/web
+    labels:
+      - traefik.http.routers.web.rule=Host(`monorepo-docker-ts`)
+      - traefik.http.services.web.loadbalancer.server.port=3000
